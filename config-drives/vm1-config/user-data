@@ -1,0 +1,12 @@
+#cloud-config
+password: qwerty
+chpasswd: { expire: False }
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWUgNQ7qRgbjLNofp/JAImqORKCFAOVPGdqMjV+rNIxs0R5UNKxXNkMAqjf0mWgdgK8idTA3oNmDfHR23Yg6ouC/Fw2sEE9PISAozOaivnFvMWobkAD2xkGGv4P4kYW1TmMetgUy6Litu5O02Ohl06P1Sf95A+2eqSrqQnoBCzbUKz6bRhFBZ9V/UDxBZgr6MHpAfN9+d8+gSCWh1xfi4VdeUkIfHX/dX4sBvXr0M2yVGnZpBAPanhqbJyP4w2Gxqkuh+mhJ7Zyo+v7Ezx7o/nHfY5JUEa9KvBFrq9PiQSIWoCf/RENa9pbV00EUfJvj5/P7KsuPi03zyfjZS8pXWn alexey@ubuntu-server-16
+
+runcmd:
+ - [ sh, -c, "/sbin/sysctl net.ipv4.ip_forward=1" ]
+ - [ sh, -c, "/sbin/iptables -t nat -A POSTROUTING -s 192.168.124.102 -o ens3 -j MASQUERADE" ]
+ - [ sh, -c, "/sbin/ip link add vxlan0 type vxlan id 42 remote 192.168.124.102 local 192.168.124.101 dstport 4789" ]
+ - [ sh, -c, "/sbin/ip link set vxlan0 up" ]
+ - [ sh, -c, "/sbin/ip addr add 192.168.1.1/24 dev vxlan0" ]
