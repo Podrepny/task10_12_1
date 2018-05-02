@@ -5,6 +5,10 @@ cd $SCRIPT_DIR
 
 source config
 
+#EXT_XML_PATH="networks/$EXTERNAL_NET_NAME.xml"
+#INT_XML_PATH="networks/$INTERNAL_NET_NAME.xml"
+#EXT_XML_PATH="networks/$MANAGEMENT_NET_NAME.xml"
+
 ## install packages
 apt-get update
 #apt-get upgrade
@@ -15,21 +19,34 @@ apt-get -y install mc virt-top libvirt-doc
 ## download virtual mashine
 wget -c https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img || exit 1
 
-# Create netwoks
-# External
+## Create netwoks
+## Make xml based on config
+#mkdir -p networks
+
+## external.xml
+#networks/external.xml
+## internal.xml
+#networks/internal.xml
+## management.xml
+#networks/management.xml
+
+## External
 virsh net-define networks/external.xml
 virsh net-autostart external
 virsh net-start external
-# Internal
+## Internal
 virsh net-define networks/internal.xml
 virsh net-autostart internal
 virsh net-start internal
-# Management
+## Management
 virsh net-define networks/management.xml
 virsh net-autostart management
 virsh net-start management
 
 virsh net-list --all
+
+## Make user-data and meta-data  based on config
+#mkdir -p config-drives/vm1-config config-drives/vm2-config
 
 ## Create config iso for vm
 genisoimage -output config-vm1.iso -volid cidata -joliet -rock config-drives/vm1-config/{user-data,meta-data}

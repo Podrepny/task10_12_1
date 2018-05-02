@@ -10,3 +10,7 @@ runcmd:
  - [ sh, -c, "/sbin/ip link add vxlan0 type vxlan id 42 remote 192.168.124.102 local 192.168.124.101 dstport 4789" ]
  - [ sh, -c, "/sbin/ip link set vxlan0 up" ]
  - [ sh, -c, "/sbin/ip addr add 192.168.1.1/24 dev vxlan0" ]
+ - [ sh, -c, "/usr/bin/curl -fsSL https://download.docker.com/linux/ubuntu/gpg | /usr/bin/apt-key add -" ]
+ - [ sh, -c, '/usr/bin/add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"' ]
+ - [ sh, -c, "/usr/bin/apt-get update" ]
+ - [ sh, -c, "/usr/bin/apt-get -y install docker-ce" ]
