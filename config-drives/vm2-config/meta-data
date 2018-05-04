@@ -7,7 +7,6 @@ network-interfaces: |
   address 192.168.124.102
   network 192.168.124.0
   netmask 255.255.255.0
-  broadcast 192.168.124.255
   gateway 192.168.124.101
   dns-nameservers 8.8.8.8
 
@@ -16,6 +15,3 @@ network-interfaces: |
   address 192.168.125.102
   network 192.168.125.0
   netmask 255.255.255.0
-  broadcast 192.168.125.255
-
-
