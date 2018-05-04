@@ -45,27 +45,15 @@ func_create_net ${MANAGEMENT_NET_NAME} ${MGM_XML_PATH}
 # debug 
 virsh net-list --all
 
-## Make user-data and meta-data  based on config
+## make user-data and meta-data  based on config
 func_gen_cludinit_conf_vm1 "${CLOUDINIT_CONF_DIR}/${VM1_NAME}${CLOUDINIT_CONF_DIR_SUFIX}"
 func_gen_cludinit_conf_vm2 "${CLOUDINIT_CONF_DIR}/${VM2_NAME}${CLOUDINIT_CONF_DIR_SUFIX}"
 
-#mkdir -p config-drives/vm2-config
-#mkdir -p /var/lib/libvirt/images/vm2/
-
+## deploy vm`s
 func_deploy_vm ${VM1_NAME} ${VM1_HDD} ${VM1_CONFIG_ISO} "--network network=${EXTERNAL_NET_NAME},model=virtio"
 func_deploy_vm ${VM2_NAME} ${VM2_HDD} ${VM2_CONFIG_ISO}
-#func_deploy_vm $VM2_NAME
 
-#genisoimage -output config-vm1.iso -volid cidata -joliet -rock config-drives/vm1-config/{user-data,meta-data}
-#genisoimage -output config-vm2.iso -volid cidata -joliet -rock config-drives/vm2-config/{user-data,meta-data}
-
-
-#qemu-img convert -O qcow2 xenial-server-cloudimg-amd64-disk1.img /var/lib/libvirt/images/vm1/vm1.qcow2
-
-#virt-install --name vm1 --ram 1024 --vcpus=2 --hvm --os-type=linux --os-variant=ubuntu16.04 --disk path=/var/lib/libvirt/images/vm1/vm1.qcow2,format=qcow2,bus=virtio,cache=none --disk path=config-vm1.iso,device=cdrom --network network=external,model=virtio --network network=internal,model=virtio --network network=management,model=virtio --graphics vnc,port=-1,listen=0.0.0.0 --noautoconsole --virt-type kvm
-
-#qemu-img convert -O qcow2 xenial-server-cloudimg-amd64-disk1.img /var/lib/libvirt/images/vm2/vm2.qcow2
-
-#virt-install --name vm2 --ram 1024 --vcpus=2 --hvm --os-type=linux --os-variant=ubuntu16.04 --disk path=/var/lib/libvirt/images/vm2/vm2.qcow2,format=qcow2,bus=virtio,cache=none --disk path=config-vm2.iso,device=cdrom --network network=internal,model=virtio --network network=management,model=virtio --graphics vnc,port=-1,listen=0.0.0.0 --noautoconsole --virt-type kvm
-
+# debug
 virsh list --all
+
+exit 0
