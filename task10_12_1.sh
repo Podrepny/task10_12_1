@@ -19,9 +19,6 @@ INT_XML_PATH="${XML_PATH}/${INTERNAL_NET_NAME}.xml"
 MGM_VIBR_NAME="${VI_BR_PREFIX}${MANAGEMENT_NET##*.}"
 MGM_XML_PATH="${XML_PATH}/${MANAGEMENT_NET_NAME}.xml"
 
-## generate id_rsa
-## ssh-keygen -t rsa -b 4096 -f /tmp/sshkey -q -N ""
-
 ## install packages
 apt-get update
 apt-get -y install ssh openssh-server
