@@ -64,14 +64,12 @@ network-interfaces: |
 EOF
 
 ## user-data
-SSH_PUBLIC_KEY=`cat /home/alexey/.ssh/id_rsa.pub`
-
 cat <<EOF > $1/user-data
 #cloud-config
 #password: qwerty
 #chpasswd: { expire: False }
 ssh_authorized_keys:
-  - $SSH_PUBLIC_KEY
+  - $(cat $SSH_PUB_KEY)
 
 runcmd:
  - [ sh, -c, "/sbin/sysctl net.ipv4.ip_forward=1" ]
@@ -111,14 +109,12 @@ network-interfaces: |
 EOF
 
 ## user-data
-SSH_PUBLIC_KEY=`cat /home/alexey/.ssh/id_rsa.pub`
-
 cat <<EOF > $1/user-data
 #cloud-config
 #password: qwerty
 #chpasswd: { expire: False }
 ssh_authorized_keys:
-  - $SSH_PUBLIC_KEY
+  - $(cat $SSH_PUB_KEY)
 
 runcmd:
  - [ sh, -c, "/sbin/ip link add ${VXLAN_IF} type vxlan id ${VID} remote ${VM1_INTERNAL_IP} local ${VM2_INTERNAL_IP} dstport 4789" ]
