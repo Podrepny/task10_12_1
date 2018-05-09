@@ -24,6 +24,7 @@ MANAGEMENT_HOST_IP=${MANAGEMENT_NET}.1
 # VMs global parameters
 SSH_PUB_KEY=/home/alexey/.ssh/id_rsa.pub
 VM_TYPE=hvm
+VM_VIRT_TYPE=kvm
 VM_DNS=8.8.8.8
 VM_BASE_IMAGE=https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
 # overlay

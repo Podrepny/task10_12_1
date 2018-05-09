@@ -134,13 +134,6 @@ function func_deploy_vm {
   local VM_CONFIG_ISO=$3
   local EXTERNAL_NET=$4
 
-  # Debug
-  echo "VM_NAME: $VM_NAME"
-  echo "VM_HDD: $VM_HDD"
-  echo "VM_HDD_DIR: $VM_HDD_DIR"
-  echo "VM_CONFIG_ISO: $VM_CONFIG_ISO"
-  echo "EXTERNAL_NET: $EXTERNAL_NET"
-
   # Generate meta-data iso file
   mkdir -p $VM_HDD_DIR
 
@@ -149,9 +142,7 @@ function func_deploy_vm {
   qemu-img convert -O qcow2 xenial-server-cloudimg-amd64-disk1.img $VM_HDD
 
   # Create vm
-  #virt-install --name $VM_NAME --ram 1024 --vcpus=2 --hvm --os-type=linux --os-variant=ubuntu16.04 --disk path=$VM_HDD,format=qcow2,bus=virtio,cache=none --disk path=$VM_CONFIG_ISO,device=cdrom $EXTERNAL_NET --network network=internal,model=virtio --network network=management,model=virtio --graphics vnc,port=-1,listen=0.0.0.0 --noautoconsole --virt-type kvm
-
-  GENERIC_OPTS="--ram 1024 --vcpus=2 --hvm --os-type=linux --os-variant=ubuntu16.04 --graphics vnc,port=-1,listen=0.0.0.0 --noautoconsole --virt-type kvm"
+  GENERIC_OPTS="--ram 1024 --vcpus=2 --${VM_TYPE} --os-type=linux --os-variant=ubuntu16.04 --graphics vnc,port=-1,listen=0.0.0.0 --noautoconsole --virt-type ${VM_VIRT_TYPE}"
   virt-install \
     $GENERIC_OPTS \
     --name $VM_NAME \
