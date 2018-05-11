@@ -60,6 +60,10 @@ func_gen_cludinit_conf_vm2 "${CLOUDINIT_CONF_DIR}/${VM2_NAME}${CLOUDINIT_CONF_DI
 
 ## deploy vm`s
 func_deploy_vm ${VM1_NAME} ${VM1_HDD} ${VM1_CONFIG_ISO} "--network network=${EXTERNAL_NET_NAME},model=virtio,mac=${EXT_VM1_MAC}"
+
+# wait dhcp for vm1
+func_wait_dhcp "30"
+
 func_deploy_vm ${VM2_NAME} ${VM2_HDD} ${VM2_CONFIG_ISO}
 
 # debug

@@ -130,6 +130,20 @@ runcmd:
 EOF
 }
 
+function func_wait_dhcp {
+  local WAIT_DELAY=$1
+  while [[ ${WAIT_COUNTER} -lt ${WAIT_DELAY} ]]
+  do
+      (( WAIT_COUNTER++ ))
+      virsh net-dhcp-leases ${EXTERNAL_NET_NAME} | grep "${EXT_VM1_MAC}"
+      if [[ $? -eq 0 ]]; then
+          WAIT_COUNTER="${WAIT_DELAY}"
+      fi
+      sleep 1s
+      echo "wait DHCP for ${VM1_NAME}: ${WAIT_COUNTER} of ${WAIT_DELAY}"
+  done
+}
+
 function func_deploy_vm {
   local VM_NAME=$1
   local VM_HDD=$2
@@ -145,7 +159,7 @@ function func_deploy_vm {
   qemu-img convert -O qcow2 xenial-server-cloudimg-amd64-disk1.img $VM_HDD
 
   # Create vm
-  GENERIC_OPTS="--ram 1024 --vcpus=2 --${VM_TYPE} --os-type=linux --os-variant=ubuntu16.04 --graphics vnc,port=-1,listen=0.0.0.0 --noautoconsole --virt-type ${VM_VIRT_TYPE}"
+  GENERIC_OPTS="--ram ${VM1_MB_RAM} --vcpus=${VM1_NUM_CPU} --${VM_TYPE} --os-type=linux --os-variant=ubuntu16.04 --graphics vnc,port=-1,listen=0.0.0.0 --noautoconsole --virt-type ${VM_VIRT_TYPE}"
   virt-install \
     $GENERIC_OPTS \
     --name $VM_NAME \
