@@ -12,11 +12,15 @@ CLOUDINIT_CONF_DIR_SUFIX="-config"
 VI_BR_PREFIX="virbr"
 EXT_DHCP_IP_RANGE_BEGIN="2"
 EXT_DHCP_IP_RANGE_END="254"
-EXT_VIBR_NAME="${VI_BR_PREFIX}${EXTERNAL_NET##*.}"
+EXT_VM1_MAC=52:54:00:`(date; cat /proc/interrupts) | md5sum | sed -r 's/^(.{6}).*$/\1/; s/([0-9a-f]{2})/\1:/g; s/:$//;'`
+#EXT_VIBR_NAME="${VI_BR_PREFIX}${EXTERNAL_NET##*.}"
+EXT_VIBR_NAME="${VI_BR_PREFIX}-${VM1_EXTERNAL_IF}"
 EXT_XML_PATH="${XML_PATH}/${EXTERNAL_NET_NAME}.xml"
-INT_VIBR_NAME="${VI_BR_PREFIX}${INTERNAL_NET##*.}"
+#INT_VIBR_NAME="${VI_BR_PREFIX}${INTERNAL_NET##*.}"
+INT_VIBR_NAME="${VI_BR_PREFIX}-${VM1_INTERNAL_IF}"
 INT_XML_PATH="${XML_PATH}/${INTERNAL_NET_NAME}.xml"
-MGM_VIBR_NAME="${VI_BR_PREFIX}${MANAGEMENT_NET##*.}"
+#MGM_VIBR_NAME="${VI_BR_PREFIX}${MANAGEMENT_NET##*.}"
+MGM_VIBR_NAME="${VI_BR_PREFIX}-${VM1_MANAGEMENT_IF}"
 MGM_XML_PATH="${XML_PATH}/${MANAGEMENT_NET_NAME}.xml"
 
 ## generate id_rsa
@@ -55,7 +59,7 @@ func_gen_cludinit_conf_vm1 "${CLOUDINIT_CONF_DIR}/${VM1_NAME}${CLOUDINIT_CONF_DI
 func_gen_cludinit_conf_vm2 "${CLOUDINIT_CONF_DIR}/${VM2_NAME}${CLOUDINIT_CONF_DIR_SUFIX}"
 
 ## deploy vm`s
-func_deploy_vm ${VM1_NAME} ${VM1_HDD} ${VM1_CONFIG_ISO} "--network network=${EXTERNAL_NET_NAME},model=virtio"
+func_deploy_vm ${VM1_NAME} ${VM1_HDD} ${VM1_CONFIG_ISO} "--network network=${EXTERNAL_NET_NAME},model=virtio,mac=${EXT_VM1_MAC}"
 func_deploy_vm ${VM2_NAME} ${VM2_HDD} ${VM2_CONFIG_ISO}
 
 # debug
