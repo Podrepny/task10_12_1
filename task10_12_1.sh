@@ -22,7 +22,7 @@ INT_XML_PATH="${XML_PATH}/${INTERNAL_NET_NAME}.xml"
 #MGM_VIBR_NAME="${VI_BR_PREFIX}${MANAGEMENT_NET##*.}"
 MGM_VIBR_NAME="${VI_BR_PREFIX}-${VM1_MANAGEMENT_IF}"
 MGM_XML_PATH="${XML_PATH}/${MANAGEMENT_NET_NAME}.xml"
-MAX_TIMEOUT_FOR_VM1="30"
+MAX_TIMEOUT_FOR_VM1="60"
 
 ## generate id_rsa
 if [ ! -e $SSH_PUB_KEY ]; then 
@@ -60,13 +60,13 @@ func_gen_cludinit_conf_vm1 "${CLOUDINIT_CONF_DIR}/${VM1_NAME}${CLOUDINIT_CONF_DI
 func_gen_cludinit_conf_vm2 "${CLOUDINIT_CONF_DIR}/${VM2_NAME}${CLOUDINIT_CONF_DIR_SUFIX}"
 
 ## deploy vm1
-func_deploy_vm ${VM1_NAME} ${VM1_HDD} ${VM1_CONFIG_ISO} "--network network=${EXTERNAL_NET_NAME},model=virtio,mac=${EXT_VM1_MAC}"
+func_deploy_vm ${VM1_NAME} ${VM1_HDD} ${VM1_CONFIG_ISO} ${VM1_NUM_CPU} ${VM1_MB_RAM} "--network network=${EXTERNAL_NET_NAME},model=virtio,mac=${EXT_VM1_MAC}"
 
 ## wait dhcp for vm1
 func_wait_dhcp ${MAX_TIMEOUT_FOR_VM1}
 
 ## deploy vm1
-func_deploy_vm ${VM2_NAME} ${VM2_HDD} ${VM2_CONFIG_ISO}
+func_deploy_vm ${VM2_NAME} ${VM2_HDD} ${VM2_CONFIG_ISO} ${VM2_NUM_CPU} ${VM2_MB_RAM}
 
 # debug
 virsh list --all
